@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class SaveDataManager : MonoBehaviour
 {
-#if !UNITY_EDITOR && UNITY_SWITCH
+#if !UNITY_EDITOR && UNITY_SWITCH // Switch implementation
     private nn.account.Uid userId;
-    private const string mountName = "CBGS";
+    private const string mountName = "CBGS"; // Unique name for each game
 
-    List<string> initializedFiles = new List<string>();
+    List<string> initializedFiles = new List<string>(); //Stores Files that have already been checked since the app launched
     private static SaveDataManager instance;
     public static SaveDataManager Instance
     {
@@ -169,7 +169,7 @@ public class SaveDataManager : MonoBehaviour
         UnityEngine.Switch.Notification.LeaveExitRequestHandlingSection();
 #endif
     }
-# else
+# else //PC implementation
     private static SaveDataManager instance;
     public static SaveDataManager Instance
     {
