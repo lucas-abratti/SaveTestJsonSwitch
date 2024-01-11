@@ -3,48 +3,24 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class SaveDataManager : MonoBehaviour
+public static class SaveDataManager
 {
-#if !UNITY_EDITOR && UNITY_SWITCH // Switch implementation
-    private nn.account.Uid userId;
+#if true//!UNITY_EDITOR && UNITY_SWITCH // Switch implementation
     private const string mountName = "CBGS"; // Unique name for each game
 
-    List<string> initializedFiles = new List<string>(); //Stores Files that have already been checked since the app launched
-    private static SaveDataManager instance;
-    public static SaveDataManager Instance
-    {
-        get 
-        { 
-            if (instance != null)
-            {
-                return instance;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        set 
-        {
-            if (instance == null)
-            {
-                instance = value;
-            }
-            else
-            {
-                Destroy(value);
-            }
-        }
-    }
-    private void Awake()
-    {
-        Instance = this;
-    }
+    static List<string> initializedFiles = new List<string>(); //Stores Files that have already been initialized since the app launched
 
-    private void Start()
+    private static bool isMounted = false;
+
+    private static nn.account.Uid userId;
+
+    private static void MountSaveData()
     {
+        isMounted = true;
         nn.account.Account.Initialize();
         nn.account.UserHandle userHandle = new nn.account.UserHandle();
+
+        Debug.LogError("Trying to open preselected User");
 
         if (!nn.account.Account.TryOpenPreselectedUser(ref userHandle))
         {
@@ -55,8 +31,9 @@ public class SaveDataManager : MonoBehaviour
         result = nn.fs.SaveData.Mount(mountName, userId);
         result.abortUnlessSuccess();
     }
-    private void Initialize(string fileName)
+    private static void InitializeFile(string fileName)
     {
+        if (!isMounted) { MountSaveData(); }
         initializedFiles.Add(fileName);
         string filePath = mountName + ":/" + fileName;
         nn.fs.EntryType entryType = 0;
@@ -103,8 +80,9 @@ public class SaveDataManager : MonoBehaviour
         UnityEngine.Switch.Notification.LeaveExitRequestHandlingSection();
 #endif
     }
-    public object Load(string fileName, System.Type type)
+    public static object Load(string fileName, System.Type type)
     {
+        if (!isMounted) { MountSaveData(); }
         string filePath = mountName + ":/" + fileName;
         nn.fs.EntryType entryType = 0;
         nn.Result result = nn.fs.FileSystem.GetEntryType(ref entryType, filePath);
@@ -136,9 +114,9 @@ public class SaveDataManager : MonoBehaviour
         }
     }
     
-    public void Save(string fileName, object obj)
+    public static void Save(string fileName, object obj)
     {
-        if (!initializedFiles.Contains(fileName)) { Initialize(fileName); }
+        if (!initializedFiles.Contains(fileName)) { InitializeFile(fileName); }
         string filePath = mountName + ":/" + fileName;
         string dataToSave = JsonUtility.ToJson(obj);
         byte[] data;
@@ -170,42 +148,12 @@ public class SaveDataManager : MonoBehaviour
 #endif
     }
 # else //PC implementation
-    private static SaveDataManager instance;
-    public static SaveDataManager Instance
-    {
-        get 
-        { 
-            if (instance != null)
-            {
-                return instance;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        set 
-        {
-            if (instance == null)
-            {
-                instance = value;
-            }
-            else
-            {
-                Destroy(value);
-            }
-        }
-    }
-    private void Awake()
-    {
-        Instance = this;
-    }
-    public void Save(string fileName, object obj)
+    public static void Save(string fileName, object obj)
     {
         throw new NotImplementedException();
     }
 
-    public object Load(string fileName, System.Type type)
+    public static object Load(string fileName, System.Type type)
     {
         return new NotImplementedException();
     }

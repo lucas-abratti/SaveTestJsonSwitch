@@ -22,12 +22,12 @@ public class GameSaveData : IDataSaver
     public void Save()
     {
         Debug.LogError("Starting save from GameSaveData.cs");
-        SaveDataManager.Instance.Save(fileName, this);
+        SaveDataManager.Save(fileName, this);
     }
     public void Load()
     {
         Debug.LogError("Loading GameSaveData");
-        GameSaveData gs = (GameSaveData) SaveDataManager.Instance.Load(fileName, typeof(GameSaveData));
+        GameSaveData gs = (GameSaveData) SaveDataManager.Load(fileName, typeof(GameSaveData));
         if(gs == null) { return; }
         this.level = gs.level;
         this.name = gs.name;

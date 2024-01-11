@@ -17,14 +17,14 @@ public class OptionsSaveData : IDataSaver
     }
     public void Load()
     {
-        OptionsSaveData os = (OptionsSaveData)SaveDataManager.Instance.Load(fileName, typeof(OptionsSaveData));
+        OptionsSaveData os = (OptionsSaveData)SaveDataManager.Load(fileName, typeof(OptionsSaveData));
         if (os == null) { return; }
         Debug.LogError($"{os.volume}\n{os.language}");
     }
 
     public void Save()
     {
-        SaveDataManager.Instance.Save(fileName, this);
+        SaveDataManager.Save(fileName, this);
     }
     public void IncreaseVolume()
     {

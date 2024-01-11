@@ -17,12 +17,14 @@ public class SaveInputController : MonoBehaviour
     public void Save(CallbackContext context)
     {
         if (!context.started) { return; }
+        Debug.LogError($"Saving");
         gameSaveData.Save();
         optionsSaveData.Save();
     }
     public void Load(CallbackContext context)
     {
         if (!context.started) { return; }
+        Debug.LogError($"Loading");
         gameSaveData.Load();
         optionsSaveData.Load();
     }
@@ -31,5 +33,6 @@ public class SaveInputController : MonoBehaviour
         if (!context.started) { return; }
         gameSaveData.IncreaseLevel();
         optionsSaveData.IncreaseVolume();
+        Debug.LogError($"{gameSaveData.level} | {optionsSaveData.volume}");
     }
 }
