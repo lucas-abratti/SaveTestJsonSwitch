@@ -21,17 +21,17 @@ public class GameSaveData : IDataSaver
     }
     public void Save()
     {
-        Debug.LogError("Starting save from GameSaveData.cs");
+        Debug.LogWarning("Starting save from GameSaveData.cs");
         SaveDataManager.Save(fileName, this);
     }
     public void Load()
     {
-        Debug.LogError("Loading GameSaveData");
+        Debug.LogWarning("Loading GameSaveData");
         GameSaveData gs = (GameSaveData) SaveDataManager.Load(fileName, typeof(GameSaveData));
         if(gs == null) { return; }
         this.level = gs.level;
         this.name = gs.name;
         this.position = gs.position;
-        Debug.LogError($"{level}\n{name}\n{position}");
+        Debug.LogWarning($"Level: {level}\nName: {name}\nPos: {position}");
     }
 }

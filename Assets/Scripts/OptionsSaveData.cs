@@ -17,13 +17,15 @@ public class OptionsSaveData : IDataSaver
     }
     public void Load()
     {
+        Debug.LogWarning("Loading OptionsSaveData");
         OptionsSaveData os = (OptionsSaveData)SaveDataManager.Load(fileName, typeof(OptionsSaveData));
         if (os == null) { return; }
-        Debug.LogError($"{os.volume}\n{os.language}");
+        Debug.LogWarning($"Volume: {os.volume}\nLang: {os.language}");
     }
 
     public void Save()
     {
+        Debug.LogWarning("Starting save from OptionsSaveData.cs");
         SaveDataManager.Save(fileName, this);
     }
     public void IncreaseVolume()

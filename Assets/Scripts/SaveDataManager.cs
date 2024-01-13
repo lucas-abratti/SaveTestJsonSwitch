@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class SaveDataManager
 {
-#if true//!UNITY_EDITOR && UNITY_SWITCH // Switch implementation
+#if !UNITY_EDITOR && UNITY_SWITCH // Switch implementation
     private const string mountName = "CBGS"; // Unique name for each game
 
     static List<string> initializedFiles = new List<string>(); //Stores Files that have already been initialized since the app launched
@@ -148,14 +148,67 @@ public static class SaveDataManager
 #endif
     }
 # else //PC implementation
-    public static void Save(string fileName, object obj)
+
+    // Carpetas y subcarpetas de guardado para mantener organizacion
+    private const string Save_Folder = "/Saves/";
+    private const string Default_Sub_Folder = "Default";
+
+    // Retorna la ruta completa de guardado
+    public static string GetSavePath(string subFolder = Default_Sub_Folder)
     {
-        throw new NotImplementedException();
+        // Persistent Data Path
+        // Win --> %userprofile%\AppData\LocalLow\<companyname>\<productname>
+        string savePath = Application.persistentDataPath + Save_Folder;
+        savePath += subFolder + "/";
+        return savePath;
+    }
+
+    // Verifica si el archivo de guardado ya existe
+    public static bool IsSavedFileExistent(string fileName, string subFolder = Default_Sub_Folder)
+    {
+        string savePath = GetSavePath(subFolder);
+        return File.Exists(savePath + fileName);
+    }
+
+    // Guarda un archivo a disco utilizando el guardado elegido, cierra FileStream al final
+    public static void Save(string fileName, object objectToSave)
+    {
+        string savePath = GetSavePath("JSON");
+
+        // Si hace falta, crea una carpeta para guardado.
+        if (!Directory.Exists(savePath))
+        {
+            Directory.CreateDirectory(savePath);
+        }
+
+        FileStream saveFile = File.Create(savePath + fileName + ".json");
+        
+        // Serializa el objeto con los datos a un JSON
+        string json = JsonUtility.ToJson(objectToSave);
+
+        // Escribe y automaticamente cierra FileStream y StreamWriter
+        using StreamWriter streamWriter = new(saveFile, System.Text.Encoding.UTF8);
+        streamWriter.Write(json);
     }
 
     public static object Load(string fileName, System.Type type)
     {
-        return new NotImplementedException();
+        string savePath = GetSavePath("JSON");
+
+        // Si no existe el archivo ha ocurrido algun error
+        if (!File.Exists(savePath + fileName + ".json"))
+        {
+            Debug.LogError($"SaveManager: No existe el archivo {fileName} en: {savePath}");
+            return null;
+        }
+
+        FileStream saveFile = File.OpenRead(savePath + fileName + ".json");
+        using StreamReader streamReader = new(saveFile, System.Text.Encoding.UTF8);
+        string json = streamReader.ReadToEnd();
+        object data = JsonUtility.FromJson(json, type);
+
+        // Si esta todo OK retorna la data a cargar
+        return data;
     }
 #endif
 }

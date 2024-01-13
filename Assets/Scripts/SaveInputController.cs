@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 using static UnityEngine.InputSystem.InputAction;
 
 public class SaveInputController : MonoBehaviour
@@ -17,14 +18,14 @@ public class SaveInputController : MonoBehaviour
     public void Save(CallbackContext context)
     {
         if (!context.started) { return; }
-        Debug.LogError($"Saving");
+        Debug.LogWarning($"Saving...");
         gameSaveData.Save();
         optionsSaveData.Save();
     }
     public void Load(CallbackContext context)
     {
         if (!context.started) { return; }
-        Debug.LogError($"Loading");
+        Debug.LogWarning($"Loading...");
         gameSaveData.Load();
         optionsSaveData.Load();
     }
@@ -33,6 +34,6 @@ public class SaveInputController : MonoBehaviour
         if (!context.started) { return; }
         gameSaveData.IncreaseLevel();
         optionsSaveData.IncreaseVolume();
-        Debug.LogError($"{gameSaveData.level} | {optionsSaveData.volume}");
+        Debug.LogWarning($"Level: {gameSaveData.level} | Volume: {optionsSaveData.volume}");
     }
 }

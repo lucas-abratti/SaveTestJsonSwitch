@@ -88,6 +88,17 @@
                     "action": "IncreaseLevel",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3d6ea448-30bf-41da-b9c7-8c8a09897c18",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "IncreaseLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
