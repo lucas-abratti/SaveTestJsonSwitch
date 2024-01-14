@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "IncreaseLevel",
+                    "name": "ChangeValues",
                     "type": "Button",
                     "id": "cb7a8c0a-57bd-4571-8b51-2c60b4c1a489",
                     "expectedControlType": "Button",
@@ -85,7 +85,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "IncreaseLevel",
+                    "action": "ChangeValues",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -96,7 +96,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "IncreaseLevel",
+                    "action": "ChangeValues",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

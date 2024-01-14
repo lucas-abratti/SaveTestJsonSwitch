@@ -214,7 +214,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 352276158}
         m_TargetAssemblyTypeName: SaveInputController, Assembly-CSharp
-        m_MethodName: IncreaseLevel
+        m_MethodName: ChangeValues
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

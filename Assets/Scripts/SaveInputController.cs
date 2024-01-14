@@ -1,23 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 using static UnityEngine.InputSystem.InputAction;
 
 public class SaveInputController : MonoBehaviour
 {
-    GameSaveData gameSaveData;
-    OptionsSaveData optionsSaveData;
-
-    private void Start()
-    {
-        gameSaveData = new GameSaveData(0, "User123");
-        optionsSaveData = new OptionsSaveData(0.5f, 3);
-    }
+    GameSaveData gameSaveData = GameSaveData.Instance;
+    OptionsSaveData optionsSaveData = OptionsSaveData.Instance;
 
     public void Save(CallbackContext context)
     {
         if (!context.started) { return; }
+
         Debug.LogWarning($"Saving...");
         gameSaveData.Save();
         optionsSaveData.Save();
@@ -27,13 +19,32 @@ public class SaveInputController : MonoBehaviour
         if (!context.started) { return; }
         Debug.LogWarning($"Loading...");
         gameSaveData.Load();
-        optionsSaveData.Load();
+        optionsSaveData.Load();         
     }
-    public void IncreaseLevel(CallbackContext context)
+    public void ChangeValues(CallbackContext context)
     {
         if (!context.started) { return; }
+
         gameSaveData.IncreaseLevel();
+        gameSaveData.ChangePosition(RandVector3());
         optionsSaveData.IncreaseVolume();
-        Debug.LogWarning($"Level: {gameSaveData.level} | Volume: {optionsSaveData.volume}");
+        optionsSaveData.ChangeLanguage(Random.Range(1, 10));
+
+        Debug.LogWarning("---------------------------------------------");
+        Debug.LogWarning($"Level: {gameSaveData.GameData.Level}");
+        Debug.LogWarning($"Position: {gameSaveData.GameData.Position}");
+        Debug.LogWarning($"Volume: {optionsSaveData.OptionsData.Volume}");
+        Debug.LogWarning($"Language: {optionsSaveData.OptionsData.Language}");
+        Debug.LogWarning("---------------------------------------------");
     }
+
+    private Vector3 RandVector3()
+    {
+        float randomX = Random.Range(-100f, 100f);
+        float randomY = Random.Range(-100f, 100f);
+        float randomZ = Random.Range(-100f, 100f);
+
+        return new(randomX, randomY, randomZ);
+    }
+
 }
